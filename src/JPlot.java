@@ -1,36 +1,19 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.geom.Point2D;
 
 
-class Point{
-	double x, y;
-	public Point(double x, double y){
-		this.x = x;
-		this.y = y;
-	}
-	public Point vAdd(Point p){
-		return new Point(this.x+p.x,this.y+p.y);
-	}
-	public Point2D toPoint2D(){
-		return new Point2D.Double(this.x, this.y);
-	}
-	public String toString(){
-		return "("+x+", "+y+")";
-	}
-}
 public class JPlot extends JFrame {
 	private static final long serialVersionUID = -2946950416181717394L;
-	public static final int WIDTH = 600, HEIGHT=400;
+	public static final int WIDTH = 800, HEIGHT=600;
 	private PlotPanel plotPanel;
 	JTextField expression;
 	JButton btnEval;
+	JCheckBox btnDrawGrid, btnDrawAxisNumber;
 	JPanel mainPanel;
 	public JPlot(){
+		System.out.println(Math.PI);
 		this.setLayout(new BorderLayout());
 		plotPanel = new PlotPanel();
 		this.add(plotPanel, BorderLayout.CENTER);
@@ -39,25 +22,43 @@ public class JPlot extends JFrame {
 		JLabel y_equals = new JLabel("y = ");
 		expression = new JTextField("x", 25);
 		btnEval = new JButton("Draw");
-		JButton btnScaleUp = new JButton("+");
-		btnScaleUp.addMouseListener(new MouseAdapter(){
+		btnDrawGrid = new JCheckBox("Grid");
+		btnDrawGrid.setSelected(true);
+		btnDrawAxisNumber = new JCheckBox("Axis Number");
+		btnDrawAxisNumber.setSelected(true);
+		btnDrawGrid.addActionListener(new ActionListener() {
 			@Override
-			public void mouseClicked(MouseEvent e){
-				plotPanel.scaleUp();
+			public void actionPerformed(ActionEvent e) {
+				plotPanel.setDrawGrid(((JCheckBox)(e.getSource())).isSelected());
 			}
 		});
-		JButton btnScaleDown = new JButton("-");
-		btnScaleDown.addMouseListener(new MouseAdapter(){
+		btnDrawAxisNumber.addActionListener(new ActionListener() {
 			@Override
-			public void mouseClicked(MouseEvent e){
-				plotPanel.scaleDown();
+			public void actionPerformed(ActionEvent e) {
+				plotPanel.setDrawAxisNumber(((JCheckBox)e.getSource()).isSelected());
 			}
 		});
+//		JButton btnScaleUp = new JButton("+");
+//		btnScaleUp.addMouseListener(new MouseAdapter(){
+//			@Override
+//			public void mouseClicked(MouseEvent e){
+//				plotPanel.scaleUp();
+//			}
+//		});
+//		JButton btnScaleDown = new JButton("-");
+//		btnScaleDown.addMouseListener(new MouseAdapter(){
+//			@Override
+//			public void mouseClicked(MouseEvent e){
+//				plotPanel.scaleDown();
+//			}
+//		});
 		ctrlPanel.add(y_equals);
 		ctrlPanel.add(expression);
 		ctrlPanel.add(btnEval);
-		ctrlPanel.add(btnScaleUp);
-		ctrlPanel.add(btnScaleDown);
+//		ctrlPanel.add(btnScaleUp);
+//		ctrlPanel.add(btnScaleDown);
+		ctrlPanel.add(btnDrawGrid);
+		ctrlPanel.add(btnDrawAxisNumber);
 		btnEval.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseClicked(MouseEvent e){
